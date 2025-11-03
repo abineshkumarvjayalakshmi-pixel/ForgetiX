@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forgetix — Never Forget Again</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+    header {
+      padding: 2rem;
+      text-align: center;
+      background: #ffffff;
+      border-bottom: 1px solid #ddd;
+    }
+    h1 { font-size: 2.5rem; margin: 0; }
+    p.tagline { font-size: 1.2rem; color: #555; margin-top: .5rem; }
+    section {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.6rem;
+      background: black;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid #eee;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: .9rem;
+      color: #666;
+    }
+    input[type="email"] {
+      padding: .8rem;
+      width: 60%;
+      max-width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Forgetix</h1>
+    <p class="tagline">Your AI assistant that remembers and acts for you</p>
+  </header>
+
+  <section>
+    <h2>Never forget tasks, bills, messages or commitments again</h2>
+    <p>AI that remembers, reminds, and handles routine actions so you can focus on what matters.</p>
+
+    <div class="features">
+      <div class="card">✅ Auto-reply to emails & messages</div>
+      <div class="card">✅ Smart reminders & scheduling</div>
+      <div class="card">✅ Track bills, EMIs, SIPs & dues</div>
+      <div class="card">✅ Voice notes → actionable tasks</div>
+    </div>
+
+    <h3>Join the Early Access Waitlist</h3>
+    <form action="#" onsubmit="alert('Thank you! We will contact you soon.'); return false;">
+      <input type="email" placeholder="Enter your email" required />
+      <br />
+      <button class="btn" type="submit">Get Early Access</button>
+    </form>
+  </section>
+
+  <footer>
+    © 2025 Forgetix. All rights reserved.
+  </footer>
+</body>
+</html>
