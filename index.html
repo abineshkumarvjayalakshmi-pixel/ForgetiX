@@ -192,22 +192,37 @@ footer {
 <!-- WAITLIST -->
 <section id="join">
   <h2>Join the Waitlist</h2>
-  <input id="emailInput" type="email" placeholder="Enter your email"><br>
-  <button class="button" onclick="joinWaitlist()">Join Waitlist</button>
+  <input id="emailInput" type="email" placeholder="Enter your email">
+  <br>
+  <button class="button" onclick="submitEmail()">Join Waitlist</button>
 </section>
 
-<footer>
-  © 2025 ForgetiX — All Rights Reserved
-</footer>
-
 <script>
-function joinWaitlist() {
+function submitEmail() {
   const email = document.getElementById("emailInput").value;
   if (!email || !email.includes("@")) {
     alert("Enter a valid email");
     return;
   }
-  alert("✅ You're added to the ForgetiX waitlist!");
+
+  fetch("https://script.google.com/macros/s/AKfycbwlydPWbwHFUGrWuiHZeNQIDP3eYCOW8Px9RgJ6U_pt8Y6r_jvhg6WXs9Dq_C7yfWTanQ/exec", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: "email=" + encodeURIComponent(email)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      alert("✅ You're added to the waitlist!");
+      document.getElementById("emailInput").value = "";
+    } else {
+      alert("⚠️ Something went wrong. Try again.");
+    }
+  })
+  .catch(err => {
+    alert("⚠️ Error submitting email.");
+    console.error(err);
+  });
 }
 </script>
 
