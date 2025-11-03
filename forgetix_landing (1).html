@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ForgetiX - Your Memory Automation AI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #0a0f1c;
+      color: white;
+      text-align: center;
+    }
+    header {
+      padding: 40px 20px;
+    }
+    header img {
+      height: 90px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 42px;
+      margin: 0;
+      font-weight: bold;
+    }
+    .tagline {
+      font-size: 18px;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+    .section {
+      padding: 50px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    button {
+      padding: 15px 35px;
+      font-size: 18px;
+      border: none;
+      background: #2dd4ff;
+      color: #000;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #4be3ff;
+    }
+    footer {
+      font-size: 14px;
+      opacity: 0.6;
+      padding: 25px;
+    }
+    input[type="email"] {
+      padding: 14px;
+      width: 250px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="ForgetiX Logo" />
+    <h1>ForgetiX</h1>
+    <p class="tagline">AI that remembers & acts for you — so you never forget anything</p>
+  </header>
+
+  <div class="section">
+    <h2>AI that handles life for you</h2>
+    <p>
+      ForgetiX helps you remember bills, EMIs, SIPs, deadlines, messages, tasks —
+      and can respond, remind, and act when you can't.
+    </p>
+
+    <input type="email" id="email" placeholder="Enter email to join waitlist" />
+    <br />
+    <button onclick="joinWaitlist()">Join Waitlist</button>
+  </div>
+
+  <footer>
+    © 2025 ForgetiX. All rights reserved.
+  </footer>
+
+<script>
+function joinWaitlist() {
+  const email = document.getElementById("email").value;
+  if(!email) return alert("Enter email!");
+  alert("Thanks! You are added to the waitlist. Beta coming soon.");
+}
+</script>
+
+</body>
+</html>
