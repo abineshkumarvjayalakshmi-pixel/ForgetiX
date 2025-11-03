@@ -81,11 +81,114 @@
 </head>
 <body>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForgetiX — Your AI Memory Automation Assistant</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0a0f1c, #081a3d, #0b2d5a);
+        background-size: 400% 400%;
+        animation: gradientMove 10s ease infinite;
+        color: white;
+        text-align: center;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    header {
+        padding: 32px;
+    }
+
+    header img {
+        height: 90px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-size: 42px;
+        margin-top: 0;
+    }
+
+    p {
+        font-size: 18px;
+        max-width: 600px;
+        margin: auto;
+        opacity: 0.85;
+    }
+
+    .btn {
+        margin-top: 22px;
+        padding: 14px 26px;
+        background: #2196F3;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn:hover {
+        background: #0b7ad1;
+    }
+
+    #waitlistBox {
+        margin-top: 40px;
+    }
+
+    input {
+        padding: 12px;
+        width: 260px;
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    footer {
+        margin-top: 60px;
+        font-size: 14px;
+        opacity: 0.6;
+    }
+</style>
+</head>
+<body>
+
 <header>
     <img src="logo.png" alt="ForgetiX Logo">
     <h1>ForgetiX</h1>
     <p>Your AI that remembers & acts for you — so you never forget anything again.</p>
 </header>
+
+<section>
+    <h2>Automate Your Life</h2>
+    <p>
+        Emails. Bills. Meetings. Money. Subscriptions. Tasks.<br>
+        ForgetiX remembers — and acts for you.
+    </p>
+</section>
+
+<div id="waitlistBox">
+    <h3>Join Waitlist</h3>
+    <input id="emailInput" type="email" placeholder="Enter your email">
+    <br>
+    <button class="btn" onclick="joinWaitlist()">Join Waitlist</button>
+</div>
+
+<footer>
+    © 2025 ForgetiX. All rights reserved.
+</footer>
+
 
 <section>
     <h2>Automate Your Life</h2>
