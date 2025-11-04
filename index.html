@@ -434,6 +434,68 @@ body {
     width: 230px !important;
   }
 }
+/* Waitlist Section Styling */
+#join {
+  background: linear-gradient(135deg, #4f46e5, #6c63ff);
+  padding: 120px 40px;
+  color: white;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating dots like screenshot */
+#join::before, #join::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(rgba(255,255,255,0.3) 2px, transparent 2px);
+  background-size: 40px 40px;
+  animation: floatingDots 18s linear infinite;
+  opacity: 0.35;
+}
+
+#join::after {
+  animation-duration: 26s;
+  opacity: 0.2;
+}
+
+@keyframes floatingDots {
+  0% {transform: translate(0, 0);}
+  100% {transform: translate(60px, 80px);}
+}
+
+/* Input box */
+#email {
+  padding: 14px 18px;
+  width: 320px;
+  max-width: 90%;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  margin-top: 15px;
+  outline: none;
+}
+
+/* Button */
+.waitlist-btn {
+  margin-top: 15px;
+  padding: 12px 25px;
+  background: white;
+  color: #4f46e5;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.25s ease;
+}
+
+.waitlist-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 6px 15px rgba(0,0,0,0.2);
+}
 
 </style>
 </head>
