@@ -147,6 +147,19 @@
   box-shadow: 0 0 18px rgba(79,70,229,0.45);
   border-color: #6c63ff;
 }
+    /* Animated Background Gradient */
+body {
+  background: linear-gradient(120deg, #0d0d0d, #1a237e, #4f46e5, #0d0d0d);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 </style>
 </head>
 <body>
