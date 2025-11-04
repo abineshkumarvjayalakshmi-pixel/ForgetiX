@@ -386,6 +386,55 @@ body {
   transform: translateY(40px);
   transition: 0.8s ease;
 }
+    /* 📱 Mobile Responsive Fixes */
+@media (max-width: 768px) {
+  header {
+    padding: 12px 20px;
+  }
+
+  nav a {
+    margin-left: 12px;
+    font-size: 0.9rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    padding: 0 10px;
+  }
+
+  .hero p {
+    font-size: 1rem;
+    padding: 0 15px;
+  }
+
+  .section {
+    padding: 70px 20px;
+  }
+
+  /* Founders resize */
+  .founders {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .founder-card {
+    width: 90%;
+    max-width: 300px;
+    margin: auto;
+  }
+
+  /* Feature grid mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Input width fix */
+  #email {
+    width: 230px !important;
+  }
+}
+
 </style>
 </head>
 <body>
