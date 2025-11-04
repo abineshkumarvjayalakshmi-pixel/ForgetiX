@@ -131,17 +131,26 @@
   gap: 20px;
   margin-top: 40px;
 }
-.feature-card {
-  background: linear-gradient(135deg, rgba(79,70,229,0.25), rgba(0,0,0,0.4));
-  border: 1px solid rgba(79,70,229,0.4);
-  padding: 20px;
+/* Feature Highlight Boxes */
+.features-box {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 20px 30px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 12px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  backdrop-filter: blur(6px);
-  transition: 0.3s;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  backdrop-filter: blur(4px);
+  transition: 0.3s ease;
   box-shadow: 0 0 10px rgba(79,70,229,0.2);
 }
+
+.features-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(79,70,229,0.6);
+}
+
 .feature-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 0 18px rgba(79,70,229,0.45);
