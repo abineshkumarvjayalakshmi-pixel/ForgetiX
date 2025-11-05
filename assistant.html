@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForgetiX AI Assistant</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1a1a2e, #0f0c29);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    canvas { width: 100%; height: 60%; }
+    .chat-box {
+      width: 90%;
+      max-width: 600px;
+      height: 35%;
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow-y: auto;
+    }
+    .message {
+      margin: 8px;
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 70%;
+      line-height: 1.4;
+    }
+    .user { background: #6c63ff; align-self: flex-end; }
+    .bot { background: rgba(255,255,255,0.15); align-self: flex-start; }
+    input {
+      width: 85%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 10px;
+      outline: none;
+    }
+    button {
+      width: 10%;
+      border: none;
+      background: #6c63ff;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="face"></canvas>
+  <div class="chat-box" id="chat-box"></div>
+  <div style="display:flex; width:90%; max-width:600px;">
+    <input id="msg" placeholder="Type something..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <!-- Three.js for Humanoid Face -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <script>
+    // Minimal 3D Face Placeholder
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('face'), alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight*0.6);
+    const geometry = new THREE.SphereGeometry(2, 64, 64);
+    const material = new THREE.MeshStandardMaterial({ color: 0x6c63ff, roughness: 0.3, metalness: 0.6 });
+    const head = new THREE.Mesh(geometry, material);
+    scene.add(head);
+    const light = new THREE.PointLight(0xffffff, 1);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+    camera.position.z = 5;
+    function animate() {
+      requestAnimationFrame(animate);
+      head.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Chat functionality
+    const chatBox = document.getElementById("chat-box");
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.className = "message " + sender;
+      div.innerText = text;
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    function sendMessage() {
+      const msg = document.getElementById("msg").value.trim();
+      if(!msg) return;
+      addMessage(msg, "user");
+      document.getElementById("msg").value = "";
+      setTimeout(()=>addMessage("I'm processing your request 🤖", "bot"), 700);
+    }
+  </script>
+</body>
+</html>
