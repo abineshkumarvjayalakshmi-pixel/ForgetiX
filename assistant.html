@@ -112,13 +112,38 @@ scene.add(ambient);
       chatBox.appendChild(div);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
-    function sendMessage() {
-      const msg = document.getElementById("msg").value.trim();
-      if(!msg) return;
-      addMessage(msg, "user");
-      document.getElementById("msg").value = "";
-      setTimeout(()=>addMessage("I'm processing your request 🤖", "bot"), 700);
-    }
+async function sendMessage() {
+  const input = document.getElementById("userInput").value.trim();
+  if (!input) return;
+
+  addMessage("user", input);
+  document.getElementById("userInput").value = "";
+
+  // Show "processing" text first
+  const botMessage = addMessage("bot", "I'm processing your request 🤖");
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY" // <-- Replace this later safely
+      },
+      body: JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: input }]
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.choices[0].message.content;
+    updateMessage(botMessage, reply);
+  } catch (error) {
+    updateMessage(botMessage, "⚠️ Oops! Something went wrong, please try again.");
+    console.error(error);
+  }
+}
+
   </script>
 </body>
 </html>
