@@ -74,6 +74,9 @@
     const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('face'), alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight*0.6);
     const geometry = new THREE.SphereGeometry(2, 64, 64);
+const wireframe = new THREE.WireframeGeometry(geometry);
+const line = new THREE.LineSegments(wireframe, new THREE.LineBasicMaterial({ color: 0x00ffff, opacity: 0.3, transparent: true }));
+scene.add(line);
     const material = new THREE.MeshStandardMaterial({
   color: 0x6c63ff,
   emissive: 0x3a0ca3,
