@@ -1,177 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ForgetiX Assistant</title>
-<style>
-  body {
-    background: #111;
-    color: #0ff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-    min-height: 100vh;
-    margin: 0;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ForgetiX Assistant</title>
+  <style>
+    body {
+      background: #111111;
+      color: #E0E0E0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
 
-  #jarvis-avatar {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 30px;
-    background-color: #111;
-    border-radius: 50%;
-    box-shadow: 0 0 20px #0ff88c77;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-  }
+    /* Avatar container */
+    #avatar-container {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 30px;
+      background: #111111;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
 
-  svg {
-    display: block;
-  }
+    /* The circular Jarvis‑style graphic */
+    #avatar-container svg {
+      width: 160px;
+      height: 160px;
+    }
 
-  #chat-output {
-    width: 100%;
-    max-width: 500px;
-    background: #222;
-    border-radius: 10px;
-    padding: 15px;
-    min-height: 200px;
-    overflow-y: auto;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    font-size: 1rem;
-  }
+    /* Chat area */
+    #chat-output {
+      width: 100%;
+      max-width: 600px;
+      background: #1a1a1a;
+      border-radius: 10px;
+      padding: 15px;
+      min-height: 250px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
 
-  .message {
-    margin: 6px 0;
-  }
-  .user {
-    color: #0ff;
-    font-weight: 600;
-  }
-  .forgetix {
-    color: #88f;
-    font-style: italic;
-  }
+    .message {
+      margin: 8px 0;
+    }
+    .message.user {
+      color: #00E5FF;
+      text-align: right;
+    }
+    .message.assistant {
+      color: #88F0FF;
+      text-align: left;
+    }
 
-  #input-container {
-    width: 100%;
-    max-width: 500px;
-    display: flex;
-    gap: 10px;
-  }
+    /* Input container */
+    #input-container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      gap: 10px;
+    }
 
-  #user-input {
-    flex-grow: 1;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: #222;
-    color: #0ff;
-  }
+    #user-input {
+      flex-grow: 1;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: #222222;
+      color: #E0E0E0;
+      box-sizing: border-box;
+    }
 
-  #send-btn {
-    background: #0ff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: 700;
-    color: #111;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  #send-btn:hover {
-    background: #06c;
-    color: #0ff;
-  }
+    #send-btn {
+      padding: 10px 20px;
+      font-weight: 600;
+      background: #00E5FF;
+      color: #111111;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #send-btn:hover {
+      background: #00C8D8;
+    }
 
-  @keyframes pulse {
-    0% { box-shadow: 0 0 20px #0ff88c77; transform: scale(1); }
-    50% { box-shadow: 0 0 40px #0ff, 0 0 60px #0ff88ccf; transform: scale(1.05); }
-    100% { box-shadow: 0 0 20px #0ff88c77; transform: scale(1); }
-  }
-</style>
+    /* Pulse animation for avatar reaction */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 20px rgba(0,229,255,0.4); transform: scale(1); }
+      50% { box-shadow: 0 0 40px #00E5FF, 0 0 60px rgba(0,229,255,0.6); transform: scale(1.05); }
+      100% { box-shadow: 0 0 20px rgba(0,229,255,0.4); transform: scale(1); }
+    }
+
+    .pulse-animation {
+      animation: pulse 0.6s ease;
+    }
+  </style>
 </head>
 <body>
 
-<div id="jarvis-avatar">
-  <svg width="200" height="200" viewBox="0 0 200 200">
-    <circle cx="100" cy="100" r="70" stroke="#0ff" stroke-width="4" fill="none" />
-    <circle cx="100" cy="100" r="50" stroke="#0ff" stroke-width="2" fill="none" stroke-dasharray="10 10">
-      <animate attributeName="stroke-dashoffset" from="0" to="60" dur="5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="100" cy="100" r="35" stroke="#0ff" stroke-width="3" fill="none" opacity="0.6">
-      <animate attributeName="r" values="30;35;30" dur="3s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="100" cy="100" r="15" fill="#0ff" opacity="0.8">
-      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite" />
-      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="2s" repeatCount="indefinite" />
-    </circle>
-  </svg>
-</div>
+  <div id="avatar-container">
+    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="70" stroke="#00E5FF" stroke-width="4"/>
+      <circle cx="100" cy="100" r="50" stroke="#00E5FF" stroke-width="2" fill="none" stroke-dasharray="10 10">
+        <animate attributeName="stroke-dashoffset" from="0" to="60" dur="5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="100" cy="100" r="35" stroke="#00E5FF" stroke-width="3" fill="none" opacity="0.6">
+        <animate attributeName="r" values="30;35;30" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="100" cy="100" r="15" fill="#00E5FF" opacity="0.8">
+        <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0.8;0.6" dur="2s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
 
-<div id="chat-output"></div>
+  <div id="chat-output"></div>
 
-<div id="input-container">
-  <input type="text" id="user-input" placeholder="Ask ForgetiX..." autocomplete="off" />
-  <button id="send-btn">Send</button>
-</div>
+  <div id="input-container">
+    <input type="text" id="user-input" placeholder="Ask me anything..." autocomplete="off">
+    <button id="send-btn">Send</button>
+  </div>
 
-<script>
-  const jarvis = document.getElementById('jarvis-avatar');
-  const sendBtn = document.getElementById('send-btn');
-  const userInput = document.getElementById('user-input');
-  const chatOutput = document.getElementById('chat-output');
+  <script>
+    const avatar = document.getElementById('avatar-container');
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const chatOutput = document.getElementById('chat-output');
 
-  function pulseJarvis() {
-    jarvis.style.animation = 'pulse 0.6s ease';
-    jarvis.addEventListener('animationend', () => {
-      jarvis.style.animation = '';
-    }, { once: true });
-  }
+    function pulseAvatar() {
+      avatar.classList.add('pulse-animation');
+      avatar.addEventListener('animationend', () => {
+        avatar.classList.remove('pulse-animation');
+      }, { once: true });
+    }
 
-  function appendMessage(sender, text) {
-    const msg = document.createElement('div');
-    msg.className = 'message ' + (sender === 'You' ? 'user' : 'forgetix');
-    msg.textContent = `${sender}: ${text}`;
-    chatOutput.appendChild(msg);
-    chatOutput.scrollTop = chatOutput.scrollHeight;
-  }
+    function appendMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + (sender === 'You' ? 'user' : 'assistant');
+      msg.textContent = `${sender}: ${text}`;
+      chatOutput.appendChild(msg);
+      chatOutput.scrollTop = chatOutput.scrollHeight;
+    }
 
-  function fakeAIResponse(msg) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve("ForgetiX at your service! You said: " + msg);
-      }, 1500);
+    function fakeResponse(msg) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve("ForgetiX here. You said: " + msg);
+        }, 1500);
+      });
+    }
+
+    sendBtn.addEventListener('click', async () => {
+      const message = userInput.value.trim();
+      if (!message) return;
+      appendMessage('You', message);
+      userInput.value = '';
+      pulseAvatar();
+      const response = await fakeResponse(message);
+      appendMessage('ForgetiX', response);
     });
-  }
 
-  sendBtn.addEventListener('click', async () => {
-    const message = userInput.value.trim();
-    if (!message) return;
-
-    appendMessage('You', message);
-    userInput.value = '';
-
-    pulseJarvis();
-
-    const response = await fakeAIResponse(message);
-    appendMessage('ForgetiX', response);
-  });
-
-  // Also send message on Enter key
-  userInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') sendBtn.click();
-  });
-</script>
+    userInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        sendBtn.click();
+      }
+    });
+  </script>
 
 </body>
 </html>
