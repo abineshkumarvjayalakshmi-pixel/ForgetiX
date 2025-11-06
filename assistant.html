@@ -1,71 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ForgetiX AI Assistant</title>
-  <style>
-    
-    body {
-      margin: 0;
-      background: radial-gradient(circle at top, #1a1a2e, #0f0c29);
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-    canvas { width: 100%; height: 60%; }
-    .chat-box {
-      width: 90%;
-      max-width: 600px;
-      height: 35%;
-      background: rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      overflow-y: auto;
-    }
-    .message {
-      margin: 8px;
-      padding: 10px 15px;
-      border-radius: 10px;
-      max-width: 70%;
-      line-height: 1.4;
-    }
-    .user { background: #6c63ff; align-self: flex-end; }
-    .bot { background: rgba(255,255,255,0.15); align-self: flex-start; }
-    input {
-      width: 85%;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      margin-top: 10px;
-      outline: none;
-    }
-    button {
-      width: 10%;
-      border: none;
-      background: #6c63ff;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ForgetiX Assistant</title>
 
+  <!-- Your existing styles (keep them if needed) -->
   <style>
-    /* Paste the CSS code here */
+    body {
+      background-color: #111;
+      color: #0ff;
+      font-family: monospace, monospace;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Jarvis Avatar styles */
     #jarvis-avatar {
       background-color: #111;
       border-radius: 50%;
       display: block;
       margin: 20px auto;
+      width: 200px;
+      height: 200px;
     }
     
     /* Idle animation: gentle pulsing glow */
@@ -94,18 +55,76 @@
       0%, 100% { transform: scaleX(1); }
       50% { transform: scaleX(1.3); }
     }
-  </style>
 
-</head>
+    /* Chat container */
+    #chat-output {
+      max-height: 300px;
+      overflow-y: auto;
+      width: 100%;
+      max-width: 600px;
+      margin-top: 20px;
+      background: #111;
+      color: #0ff;
+      padding: 10px;
+      font-family: monospace;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
 
+    .message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    .message.user {
+      background-color: #004d4d;
+      text-align: right;
+    }
+
+    .message.jarvis {
+      background-color: #003333;
+      text-align: left;
+    }
+
+    /* Input and button */
+    #user-input {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      margin-top: 20px;
+      box-sizing: border-box;
+      background-color: #222;
+      color: #0ff;
+      font-family: monospace;
+    }
+
+    #send-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #0ff;
+      color: #111;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: monospace;
+      transition: background-color 0.3s ease;
+    }
+
+    #send-btn:hover {
+      background-color: #0cc;
+    }
   </style>
 </head>
 <body>
-  <canvas id="face"></canvas>
-  <!-- Somewhere in your assistant.html -->
-<div id="assistant-container">
-  <!-- Paste the entire SVG here -->
-  <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" id="jarvis-avatar">
+
+  <!-- Jarvis Avatar -->
+  <svg id="jarvis-avatar" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
     <!-- Outer glowing circle -->
     <circle cx="100" cy="100" r="90" stroke="#0ff" stroke-width="4" filter="url(#glow)"/>
     
@@ -123,128 +142,57 @@
       </filter>
     </defs>
   </svg>
-</div>
 
+  <!-- Chat output -->
+  <div id="chat-output"></div>
 
-  <!-- Three.js for Humanoid Face -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+  <!-- User input -->
+  <textarea id="user-input" placeholder="Ask me anything..." rows="3"></textarea>
+  <button id="send-btn">Send</button>
+
   <script>
-    // Minimal 3D Face Placeholder
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('face'), alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight*0.6);
-    const geometry = new THREE.SphereGeometry(2, 64, 64);
-const wireframe = new THREE.WireframeGeometry(geometry);
-const line = new THREE.LineSegments(wireframe, new THREE.LineBasicMaterial({ color: 0x00ffff, opacity: 0.3, transparent: true }));
-scene.add(line);
-    const material = new THREE.MeshStandardMaterial({
-  color: 0x6c63ff,
-  emissive: 0x3a0ca3,
-  emissiveIntensity: 0.8,
-  roughness: 0.2,
-  metalness: 0.8
-});
-    const head = new THREE.Mesh(geometry, material);
-    scene.add(head);
-const light1 = new THREE.PointLight(0xffffff, 2);
-light1.position.set(5, 5, 5);
-const light2 = new THREE.PointLight(0x6c63ff, 1.5);
-light2.position.set(-5, -5, 3);
-scene.add(light1, light2);
+    const sendBtn = document.getElementById('send-btn');
+    const userInput = document.getElementById('user-input');
+    const chatOutput = document.getElementById('chat-output');
+    const mouth = document.getElementById('mouth');
 
-const ambient = new THREE.AmbientLight(0x404040, 1.2);
-scene.add(ambient);
-    camera.position.z = 5;
-    function animate() {
-      requestAnimationFrame(animate);
-      head.rotation.y += 0.01;
-      head.material.emissiveIntensity = 0.5 + Math.sin(Date.now() * 0.002) * 0.3;
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // Chat functionality
-    const chatBox = document.getElementById("chat-box");
-    function addMessage(text, sender) {
-      const div = document.createElement("div");
-      div.className = "message " + sender;
-      div.innerText = text;
-      chatBox.appendChild(div);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-async function sendMessage() {
-  const input = document.getElementById("userInput").value.trim();
-  if (!input) return;
-
-  addMessage("user", input);
-  document.getElementById("userInput").value = "";
-
-  // Show "processing" text first
-  const botMessage = addMessage("bot", "I'm processing your request 🤖");
-
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer sk-...sv8A" // <-- Replace this later safely
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: input }]
-      })
+    sendBtn.addEventListener('click', async () => {
+      const message = userInput.value.trim();
+      if (!message) return;
+      
+      appendMessage('You', message);
+      userInput.value = '';
+      
+      // Start "speaking" animation
+      mouth.classList.add('speaking');
+      
+      // Simulate API call (replace with real AI call)
+      const response = await fakeAIResponse(message);
+      
+      // Show AI reply
+      appendMessage('Jarvis', response);
+      
+      // Stop speaking animation
+      mouth.classList.remove('speaking');
     });
 
-    const data = await response.json();
-    const reply = data.choices[0].message.content;
-    updateMessage(botMessage, reply);
-  } catch (error) {
-    updateMessage(botMessage, "⚠️ Oops! Something went wrong, please try again.");
-    console.error(error);
-  }
-}
-
-  </script>
-  <!-- Firebase Setup -->
-<script type="module">
-  // Import required Firebase libraries directly from CDN
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
-
-  // Your Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyCv0JlCNa5VG8FCAW-VWh4mtKqiS11tPts",
-    authDomain: "forgetix-f1c7b.firebaseapp.com",
-    projectId: "forgetix-f1c7b",
-    storageBucket: "forgetix-f1c7b.firebasestorage.app",
-    messagingSenderId: "53528277444",
-    appId: "1:53528277444:web:79d81e14be2a9efbf4f491",
-    measurementId: "G-5NGDGB2J7B"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db = getFirestore(app);
-
-  // Example function: save a chat message
-  async function saveMessage(user, message) {
-    try {
-      await addDoc(collection(db, "messages"), {
-        user: user,
-        message: message,
-        timestamp: new Date()
-      });
-      console.log("✅ Message saved to Firestore");
-    } catch (e) {
-      console.error("❌ Error adding document:", e);
+    // Append messages to chat output
+    function appendMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + (sender === 'You' ? 'user' : 'jarvis');
+      msg.textContent = `${sender}: ${text}`;
+      chatOutput.appendChild(msg);
+      chatOutput.scrollTop = chatOutput.scrollHeight;
     }
-  }
 
-  // ---- Test line (optional) ----
-  // saveMessage("Tester", "Hello from ForgetiX!");
-</script>
+    // Fake AI response function (simulate delay)
+    function fakeAIResponse(msg) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve("I'm Jarvis, your assistant. You said: " + msg);
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
