@@ -238,6 +238,49 @@ body::before {
   </div>
 
   <script>
+    const chatOutput = document.getElementById('chat-output');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+
+function appendMessage(sender, text) {
+  const msgDiv = document.createElement('div');
+  msgDiv.classList.add('message');
+  msgDiv.classList.add(sender === 'user' ? 'user' : 'assistant');
+  msgDiv.textContent = `${sender === 'user' ? 'You' : 'ForgetiX'}: ${text}`;
+  chatOutput.appendChild(msgDiv);
+  chatOutput.scrollTop = chatOutput.scrollHeight;
+}
+
+// Simple mock AI logic
+function getResponse(text) {
+  const msg = text.toLowerCase();
+  if (msg.includes('hello')) return "Hello! How can I assist you today?";
+  if (msg.includes('your name')) return "I'm ForgetiX, your AI assistant.";
+  if (msg.includes('time')) return `Current time is ${new Date().toLocaleTimeString()}.`;
+  if (msg.includes('help')) return "Sure! Ask me anything or type your query.";
+  return "I'm still learning. Could you please rephrase?";
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'en-US';
+  utterance.pitch = 1;
+  utterance.rate = 1;
+  window.speechSynthesis.speak(utterance);
+}
+
+sendBtn.addEventListener('click', () => {
+  const text = userInput.value.trim();
+  if (!text) return;
+  appendMessage('user', text);
+  userInput.value = '';
+
+  const response = getResponse(text);
+  appendMessage('assistant', response);
+  speak(response);
+});
+
     const avatar = document.getElementById('avatar-container');
     const sendBtn = document.getElementById('send-btn');
     const userInput = document.getElementById('user-input');
