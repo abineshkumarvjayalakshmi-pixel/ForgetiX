@@ -1,72 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NIAB Basic Voice-Enabled Chatbot</title>
-<style>
-  body {
-    background: linear-gradient(135deg, #8e44ad, #2980b9);
-    color: white;
-    font-family: Arial, sans-serif;
-    margin: 0; padding: 0;
-    display: flex; flex-direction: column; height: 100vh;
-    justify-content: center; align-items: center;
-  }
-  .chat-container {
-    width: 90%;
-    max-width: 600px;
-    background: rgba(0,0,0,0.4);
-    padding: 20px;
-    border-radius: 10px;
-    box-sizing: border-box;
-  }
-  #chat {
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    background: #222;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  #userInput {
-    width: calc(100% - 80px);
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-  }
-  #sendBtn {
-    width: 60px;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    margin-left: 10px;
-    background: #8e44ad;
-    color: white;
-    cursor: pointer;
-  }
-  #sendBtn:hover {
-    background: #732d91;
-  }
-  .message {
-    margin-bottom: 10px;
-  }
-  .user {
-    text-align: right;
-    color: #a29bfe;
-  }
-  .bot {
-    text-align: left;
-    color: #74b9ff;
-  }
-</style>
-</head>
+<html>
+<head><title>Send Button Test</title></head>
 <body>
 
-<div class="chat-container">
-  <div id="chat"></div>
-  <input type="text" id="userInput" placeholder="Say something..." />
-  <button id="sendBtn"
+<input type="text" id="userInput" placeholder="Type something..." />
+<button id="sendBtn">Send</button>
+<div id="output"></div>
+
+<script>
+  const userInput = document.getElementById('userInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const output = document.getElementById('output');
+
+  function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return alert("Please enter a message");
+    output.textContent = "You sent: " + text;
+    userInput.value = '';
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendMessage();
+  });
+</script>
+
+</body>
+</html>
