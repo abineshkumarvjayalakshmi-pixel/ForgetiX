@@ -191,6 +191,63 @@
 
 
 <script>
+   const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const chatOutput = document.getElementById('chat-output');
+
+  function appendMessage(sender, message) {
+    const messageElem = document.createElement('div');
+    messageElem.classList.add('message', sender);
+    messageElem.textContent = message;
+    chatOutput.appendChild(messageElem);
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+  }
+
+  // Placeholder getResponse (for frontend testing)
+  async function getResponse(message) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        if (message.toLowerCase().includes('hello')) {
+          resolve("Hello! I'm NIAB, your assistant.");
+        } else if (message.toLowerCase().includes('how are you')) {
+          resolve("I'm just code, but I'm doing great!");
+        } else {
+          resolve("Sorry, I'm still learning. Please ask something else.");
+        }
+      }, 1000);
+    });
+  }
+
+  async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    appendMessage('user', `You: ${text}`);
+    userInput.value = '';
+
+    // Optional: Show avatar talking animation here
+    // setTalking(true);
+
+    const response = await getResponse(text);
+
+    appendMessage('assistant', `NIAB: ${response}`);
+
+    // Optional: Voice speaking
+    // speak(response);
+
+    // Optional: Stop avatar talking animation
+    // setTalking(false);
+  }
+
+  // Event listener for Send button
+  sendBtn.addEventListener('click', sendMessage);
+
+  // Also send message on Enter key
+  userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
   // Particle animation setup
   const canvas = document.getElementById('particle-canvas');
   const ctx = canvas.getContext('2d');
