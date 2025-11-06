@@ -145,5 +145,45 @@ async function sendMessage() {
 }
 
   </script>
+  <!-- Firebase Setup -->
+<script type="module">
+  // Import required Firebase libraries directly from CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCv0JlCNa5VG8FCAW-VWh4mtKqiS11tPts",
+    authDomain: "forgetix-f1c7b.firebaseapp.com",
+    projectId: "forgetix-f1c7b",
+    storageBucket: "forgetix-f1c7b.firebasestorage.app",
+    messagingSenderId: "53528277444",
+    appId: "1:53528277444:web:79d81e14be2a9efbf4f491",
+    measurementId: "G-5NGDGB2J7B"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  // Example function: save a chat message
+  async function saveMessage(user, message) {
+    try {
+      await addDoc(collection(db, "messages"), {
+        user: user,
+        message: message,
+        timestamp: new Date()
+      });
+      console.log("✅ Message saved to Firestore");
+    } catch (e) {
+      console.error("❌ Error adding document:", e);
+    }
+  }
+
+  // ---- Test line (optional) ----
+  // saveMessage("Tester", "Hello from ForgetiX!");
+</script>
 </body>
 </html>
