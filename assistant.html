@@ -152,17 +152,43 @@
 <canvas id="particle-canvas"></canvas>
 
 <div class="container" role="main" aria-label="NIAB AI Assistant chat interface">
-  <!-- Add avatar here -->
+
+  <!-- NIAB AI Avatar -->
   <div id="niab-avatar" aria-label="NIAB AI avatar" role="img" title="NIAB AI Assistant">
-    <!-- SVG content here -->
+    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" >
+      <!-- Face Circle -->
+      <circle cx="60" cy="60" r="55" stroke="url(#grad)" stroke-width="2" fill="transparent" />
+      
+      <!-- Eyes -->
+      <ellipse cx="40" cy="55" rx="8" ry="5" stroke="url(#grad)" stroke-width="2" fill="transparent" />
+      <ellipse cx="80" cy="55" rx="8" ry="5" stroke="url(#grad)" stroke-width="2" fill="transparent" />
+      
+      <!-- Nose -->
+      <line x1="60" y1="60" x2="60" y2="75" stroke="url(#grad)" stroke-width="2" />
+      
+      <!-- Mouth -->
+      <path id="mouth" d="M45 85 Q60 95 75 85" stroke="url(#grad)" stroke-width="2" fill="transparent" />
+      
+      <defs>
+        <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#8a79ff"/>
+          <stop offset="100%" stop-color="#4d77ff"/>
+        </linearGradient>
+      </defs>
+    </svg>
   </div>
 
+  <!-- Chat messages output -->
   <div id="chat-output" aria-live="polite" aria-label="Chat messages"></div>
+
+  <!-- Input area -->
   <div class="input-area">
-    <input type="text" id="user-input" placeholder="Type your message here..." />
-    <button id="send-btn">Send</button>
+    <input type="text" id="user-input" placeholder="Type your message here..." aria-label="User input" autocomplete="off" />
+    <button id="send-btn" aria-label="Send message">Send</button>
   </div>
+
 </div>
+
 
 <script>
   // Particle animation setup
