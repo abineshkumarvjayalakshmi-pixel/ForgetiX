@@ -152,10 +152,15 @@
 <canvas id="particle-canvas"></canvas>
 
 <div class="container" role="main" aria-label="NIAB AI Assistant chat interface">
+  <!-- Add avatar here -->
+  <div id="niab-avatar" aria-label="NIAB AI avatar" role="img" title="NIAB AI Assistant">
+    <!-- SVG content here -->
+  </div>
+
   <div id="chat-output" aria-live="polite" aria-label="Chat messages"></div>
   <div class="input-area">
-    <input type="text" id="user-input" placeholder="Type your message here..." aria-label="User input" autocomplete="off" />
-    <button id="send-btn" aria-label="Send message">Send</button>
+    <input type="text" id="user-input" placeholder="Type your message here..." />
+    <button id="send-btn">Send</button>
   </div>
 </div>
 
