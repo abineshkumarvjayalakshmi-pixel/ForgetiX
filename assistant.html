@@ -59,11 +59,29 @@
 </head>
 <body>
   <canvas id="face"></canvas>
-  <div class="chat-box" id="chat-box"></div>
-  <div style="display:flex; width:90%; max-width:600px;">
-    <input id="msg" placeholder="Type something..." />
-    <button onclick="sendMessage()">Send</button>
-  </div>
+  <!-- Somewhere in your assistant.html -->
+<div id="assistant-container">
+  <!-- Paste the entire SVG here -->
+  <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" id="jarvis-avatar">
+    <!-- Outer glowing circle -->
+    <circle cx="100" cy="100" r="90" stroke="#0ff" stroke-width="4" filter="url(#glow)"/>
+    
+    <!-- Eyes -->
+    <rect x="55" y="80" width="20" height="10" rx="5" fill="#0ff" id="left-eye" />
+    <rect x="125" y="80" width="20" height="10" rx="5" fill="#0ff" id="right-eye" />
+    
+    <!-- Mouth (pulse bar) -->
+    <rect x="80" y="140" width="40" height="10" rx="5" fill="#0ff" id="mouth" />
+    
+    <defs>
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+        <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#0ff"/>
+        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#0ff" flood-opacity="0.5"/>
+      </filter>
+    </defs>
+  </svg>
+</div>
+
 
   <!-- Three.js for Humanoid Face -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
