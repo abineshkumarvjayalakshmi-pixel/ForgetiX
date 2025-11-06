@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ForgetiX Assistant</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ForgetiX Assistant with Voice</title>
   <style>
     body {
       background: #111111;
@@ -17,8 +17,6 @@
       min-height: 100vh;
       box-sizing: border-box;
     }
-
-    /* Avatar container */
     #avatar-container {
       width: 200px;
       height: 200px;
@@ -31,14 +29,10 @@
       justify-content: center;
       user-select: none;
     }
-
-    /* The circular Jarvis‑style graphic */
     #avatar-container svg {
       width: 160px;
       height: 160px;
     }
-
-    /* Chat area */
     #chat-output {
       width: 100%;
       max-width: 600px;
@@ -50,7 +44,6 @@
       box-sizing: border-box;
       margin-bottom: 20px;
     }
-
     .message {
       margin: 8px 0;
     }
@@ -62,15 +55,13 @@
       color: #88F0FF;
       text-align: left;
     }
-
-    /* Input container */
     #input-container {
       width: 100%;
       max-width: 600px;
       display: flex;
       gap: 10px;
+      align-items: center;
     }
-
     #user-input {
       flex-grow: 1;
       padding: 10px 15px;
@@ -82,7 +73,6 @@
       color: #E0E0E0;
       box-sizing: border-box;
     }
-
     #send-btn {
       padding: 10px 20px;
       font-weight: 600;
@@ -96,14 +86,31 @@
     #send-btn:hover {
       background: #00C8D8;
     }
-
-    /* Pulse animation for avatar reaction */
+    #mic-btn {
+      background: #00E5FF;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease;
+    }
+    #mic-btn:hover {
+      background: #00C8D8;
+    }
+    #mic-icon {
+      fill: #111111;
+      width: 20px;
+      height: 20px;
+    }
     @keyframes pulse {
       0% { box-shadow: 0 0 20px rgba(0,229,255,0.4); transform: scale(1); }
       50% { box-shadow: 0 0 40px #00E5FF, 0 0 60px rgba(0,229,255,0.6); transform: scale(1.05); }
       100% { box-shadow: 0 0 20px rgba(0,229,255,0.4); transform: scale(1); }
     }
-
     .pulse-animation {
       animation: pulse 0.6s ease;
     }
@@ -131,8 +138,11 @@
   <div id="chat-output"></div>
 
   <div id="input-container">
-    <input type="text" id="user-input" placeholder="Ask me anything..." autocomplete="off">
+    <input type="text" id="user-input" placeholder="Ask me anything..." autocomplete="off" />
     <button id="send-btn">Send</button>
+    <button id="mic-btn" title="Speak">
+      <svg id="mic-icon" viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zM12 19v3m-4-3h8" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
   </div>
 
   <script>
@@ -140,6 +150,7 @@
     const sendBtn = document.getElementById('send-btn');
     const userInput = document.getElementById('user-input');
     const chatOutput = document.getElementById('chat-output');
+    const micBtn = document.getElementById('mic-btn');
 
     function pulseAvatar() {
       avatar.classList.add('pulse-animation');
@@ -164,22 +175,68 @@
       });
     }
 
-    sendBtn.addEventListener('click', async () => {
-      const message = userInput.value.trim();
-      if (!message) return;
-      appendMessage('You', message);
+    async function sendMessage(text) {
+      if (!text.trim()) return;
+      appendMessage('You', text);
       userInput.value = '';
       pulseAvatar();
-      const response = await fakeResponse(message);
+      const response = await fakeResponse(text);
       appendMessage('ForgetiX', response);
+      speak(response);
+    }
+
+    sendBtn.addEventListener('click', () => {
+      sendMessage(userInput.value);
     });
 
     userInput.addEventListener('keypress', e => {
       if (e.key === 'Enter') {
-        sendBtn.click();
+        sendMessage(userInput.value);
       }
     });
-  </script>
 
+    // Speech Recognition (Voice Input)
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      micBtn.style.display = 'none';
+    } else {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        micBtn.style.backgroundColor = '#00C8D8';
+      };
+
+      recognition.onend = () => {
+        micBtn.style.backgroundColor = '#00E5FF';
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        micBtn.style.backgroundColor = '#00E5FF';
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        sendMessage(transcript);
+      };
+
+      micBtn.addEventListener('click', () => {
+        recognition.start();
+      });
+    }
+
+    // Speech Synthesis (Voice Output)
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.pitch = 1;
+      utterance.rate = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
 </body>
 </html>
