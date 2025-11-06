@@ -1,198 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ForgetiX Assistant</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ForgetiX Assistant</title>
+<style>
+  body {
+    background: #111;
+    color: #0ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+    margin: 0;
+  }
 
-  <!-- Your existing styles (keep them if needed) -->
-  <style>
-    body {
-      background-color: #111;
-      color: #0ff;
-      font-family: monospace, monospace;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-    }
+  #jarvis-avatar {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 30px;
+    background-color: #111;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #0ff88c77;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
 
-    /* Jarvis Avatar styles */
-    #jarvis-avatar {
-      background-color: #111;
-      border-radius: 50%;
-      display: block;
-      margin: 20px auto;
-      width: 200px;
-      height: 200px;
-    }
-    
-    /* Idle animation: gentle pulsing glow */
-    #jarvis-avatar circle {
-      animation: pulseGlow 3s infinite ease-in-out;
-    }
-    
-    /* Mouth animation when speaking */
-    #mouth.speaking {
-      animation: mouthPulse 0.6s infinite;
-      transform-origin: center;
-    }
-    
-    @keyframes pulseGlow {
-      0%, 100% {
-        stroke-opacity: 0.7;
-        filter: drop-shadow(0 0 6px #0ff);
-      }
-      50% {
-        stroke-opacity: 1;
-        filter: drop-shadow(0 0 12px #0ff);
-      }
-    }
-    
-    @keyframes mouthPulse {
-      0%, 100% { transform: scaleX(1); }
-      50% { transform: scaleX(1.3); }
-    }
+  svg {
+    display: block;
+  }
 
-    /* Chat container */
-    #chat-output {
-      max-height: 300px;
-      overflow-y: auto;
-      width: 100%;
-      max-width: 600px;
-      margin-top: 20px;
-      background: #111;
-      color: #0ff;
-      padding: 10px;
-      font-family: monospace;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
+  #chat-output {
+    width: 100%;
+    max-width: 500px;
+    background: #222;
+    border-radius: 10px;
+    padding: 15px;
+    min-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
 
-    .message {
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 5px;
-    }
+  .message {
+    margin: 6px 0;
+  }
+  .user {
+    color: #0ff;
+    font-weight: 600;
+  }
+  .forgetix {
+    color: #88f;
+    font-style: italic;
+  }
 
-    .message.user {
-      background-color: #004d4d;
-      text-align: right;
-    }
+  #input-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    gap: 10px;
+  }
 
-    .message.jarvis {
-      background-color: #003333;
-      text-align: left;
-    }
+  #user-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #222;
+    color: #0ff;
+  }
 
-    /* Input and button */
-    #user-input {
-      width: 100%;
-      max-width: 600px;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-      margin-top: 20px;
-      box-sizing: border-box;
-      background-color: #222;
-      color: #0ff;
-      font-family: monospace;
-    }
+  #send-btn {
+    background: #0ff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 700;
+    color: #111;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #send-btn:hover {
+    background: #06c;
+    color: #0ff;
+  }
 
-    #send-btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #0ff;
-      color: #111;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: monospace;
-      transition: background-color 0.3s ease;
-    }
-
-    #send-btn:hover {
-      background-color: #0cc;
-    }
-  </style>
+  @keyframes pulse {
+    0% { box-shadow: 0 0 20px #0ff88c77; transform: scale(1); }
+    50% { box-shadow: 0 0 40px #0ff, 0 0 60px #0ff88ccf; transform: scale(1.05); }
+    100% { box-shadow: 0 0 20px #0ff88c77; transform: scale(1); }
+  }
+</style>
 </head>
 <body>
 
-  <!-- Jarvis Avatar -->
-  <svg id="jarvis-avatar" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Outer glowing circle -->
-    <circle cx="100" cy="100" r="90" stroke="#0ff" stroke-width="4" filter="url(#glow)"/>
-    
-    <!-- Eyes -->
-    <rect x="55" y="80" width="20" height="10" rx="5" fill="#0ff" id="left-eye" />
-    <rect x="125" y="80" width="20" height="10" rx="5" fill="#0ff" id="right-eye" />
-    
-    <!-- Mouth (pulse bar) -->
-    <rect x="80" y="140" width="40" height="10" rx="5" fill="#0ff" id="mouth" />
-    
-    <defs>
-      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-        <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#0ff"/>
-        <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#0ff" flood-opacity="0.5"/>
-      </filter>
-    </defs>
+<div id="jarvis-avatar">
+  <svg width="200" height="200" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="70" stroke="#0ff" stroke-width="4" fill="none" />
+    <circle cx="100" cy="100" r="50" stroke="#0ff" stroke-width="2" fill="none" stroke-dasharray="10 10">
+      <animate attributeName="stroke-dashoffset" from="0" to="60" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="100" r="35" stroke="#0ff" stroke-width="3" fill="none" opacity="0.6">
+      <animate attributeName="r" values="30;35;30" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="100" cy="100" r="15" fill="#0ff" opacity="0.8">
+      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="2s" repeatCount="indefinite" />
+    </circle>
   </svg>
+</div>
 
-  <!-- Chat output -->
-  <div id="chat-output"></div>
+<div id="chat-output"></div>
 
-  <!-- User input -->
-  <textarea id="user-input" placeholder="Ask me anything..." rows="3"></textarea>
+<div id="input-container">
+  <input type="text" id="user-input" placeholder="Ask ForgetiX..." autocomplete="off" />
   <button id="send-btn">Send</button>
+</div>
 
-  <script>
-    const sendBtn = document.getElementById('send-btn');
-    const userInput = document.getElementById('user-input');
-    const chatOutput = document.getElementById('chat-output');
-    const mouth = document.getElementById('mouth');
+<script>
+  const jarvis = document.getElementById('jarvis-avatar');
+  const sendBtn = document.getElementById('send-btn');
+  const userInput = document.getElementById('user-input');
+  const chatOutput = document.getElementById('chat-output');
 
-    sendBtn.addEventListener('click', async () => {
-      const message = userInput.value.trim();
-      if (!message) return;
-      
-      appendMessage('You', message);
-      userInput.value = '';
-      
-      // Start "speaking" animation
-      mouth.classList.add('speaking');
-      
-      // Simulate API call (replace with real AI call)
-      const response = await fakeAIResponse(message);
-      
-      // Show AI reply
-      appendMessage('Jarvis', response);
-      
-      // Stop speaking animation
-      mouth.classList.remove('speaking');
+  function pulseJarvis() {
+    jarvis.style.animation = 'pulse 0.6s ease';
+    jarvis.addEventListener('animationend', () => {
+      jarvis.style.animation = '';
+    }, { once: true });
+  }
+
+  function appendMessage(sender, text) {
+    const msg = document.createElement('div');
+    msg.className = 'message ' + (sender === 'You' ? 'user' : 'forgetix');
+    msg.textContent = `${sender}: ${text}`;
+    chatOutput.appendChild(msg);
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+  }
+
+  function fakeAIResponse(msg) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve("ForgetiX at your service! You said: " + msg);
+      }, 1500);
     });
+  }
 
-    // Append messages to chat output
-    function appendMessage(sender, text) {
-      const msg = document.createElement('div');
-      msg.className = 'message ' + (sender === 'You' ? 'user' : 'jarvis');
-      msg.textContent = `${sender}: ${text}`;
-      chatOutput.appendChild(msg);
-      chatOutput.scrollTop = chatOutput.scrollHeight;
-    }
+  sendBtn.addEventListener('click', async () => {
+    const message = userInput.value.trim();
+    if (!message) return;
 
-    // Fake AI response function (simulate delay)
-    function fakeAIResponse(msg) {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve("I'm Jarvis, your assistant. You said: " + msg);
-        }, 2000);
-      });
-    }
-  </script>
+    appendMessage('You', message);
+    userInput.value = '';
+
+    pulseJarvis();
+
+    const response = await fakeAIResponse(message);
+    appendMessage('ForgetiX', response);
+  });
+
+  // Also send message on Enter key
+  userInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') sendBtn.click();
+  });
+</script>
+
 </body>
 </html>
