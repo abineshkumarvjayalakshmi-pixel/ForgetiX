@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>NIAB Basic Chatbot</title>
+<title>NIAB Basic Voice-Enabled Chatbot</title>
 <style>
   body {
     background: linear-gradient(135deg, #8e44ad, #2980b9);
@@ -69,61 +69,4 @@
 <div class="chat-container">
   <div id="chat"></div>
   <input type="text" id="userInput" placeholder="Say something..." />
-  <button id="sendBtn">Send</button>
-</div>
-
-<script>
-  const chat = document.getElementById('chat');
-  const userInput = document.getElementById('userInput');
-  const sendBtn = document.getElementById('sendBtn');
-
-  // Basic predefined responses
-  const responses = {
-    "hi": "Hello! How can I help you today?",
-    "hello": "Hi there! What can I do for you?",
-    "how are you": "I'm just a bot, but I'm doing great! Thanks for asking.",
-    "what is forgetix": "Forgetix is your personal AI assistant.",
-    "who created you": "I was created by Abinesh Kumar Vijayalakshmi.",
-    "bye": "Goodbye! Have a great day!",
-    "default": "Sorry, I don't understand that yet."
-  };
-
-  function appendMessage(sender, text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', sender);
-    messageDiv.textContent = text;
-    chat.appendChild(messageDiv);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function getResponse(text) {
-    text = text.toLowerCase();
-    for (let key in responses) {
-      if (text.includes(key)) {
-        return responses[key];
-      }
-    }
-    return responses["default"];
-  }
-
-  function sendMessage() {
-    const text = userInput.value.trim();
-    if (!text) return;
-
-    appendMessage('user', `You: ${text}`);
-    userInput.value = '';
-
-    const botResponse = getResponse(text);
-    setTimeout(() => {
-      appendMessage('bot', `NIAB: ${botResponse}`);
-    }, 500);
-  }
-
-  sendBtn.addEventListener('click', sendMessage);
-  userInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') sendMessage();
-  });
-</script>
-
-</body>
-</html>
+  <button id="sendBtn"
