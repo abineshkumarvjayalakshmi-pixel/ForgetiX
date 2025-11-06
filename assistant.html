@@ -1,63 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>ForgetiX Assistant</title>
-  <style>
-    /* Simple styles */
-    body { background: #0b111f; color: #00e5ff; font-family: sans-serif; padding: 20px; }
-    #chat-output { border: 1px solid #00e5ff; height: 300px; overflow-y: auto; padding: 10px; margin-bottom: 10px; }
-    .message.user { text-align: right; font-weight: bold; }
-    .message.assistant { text-align: left; font-style: italic; }
-    #user-input { width: 70%; padding: 8px; border-radius: 4px; border: 1px solid #00e5ff; background: #152636; color: #00e5ff; }
-    #send-btn { padding: 8px 12px; background: #00e5ff; border: none; color: #000; border-radius: 4px; cursor: pointer; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NIAB - AI Assistant</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #00e5ff;
+    background: linear-gradient(270deg, #0b111f, #000000, #02162d, #000000);
+    background-size: 800% 800%;
+    animation: gradientShift 20s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  @keyframes gradientShift {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background:
+      linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+    animation: gridMove 40s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% {background-position: 0 0, 0 0;}
+    100% {background-position: 40px 40px, 40px 40px;}
+  }
+
+  /* Container */
+  .container {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(11, 17, 31, 0.85);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #00e5ff66;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+  }
+
+  /* Chat output */
+  #chat-output {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+    border: 1px solid #00e5ff;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.25);
+    margin-bottom: 15px;
+    font-size: 1rem;
+  }
+
+  .message {
+    margin: 8px 0;
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 15px;
+    word-wrap: break-word;
+  }
+
+  .message.user {
+    background: #00e5ffcc;
+    color: #000;
+    align-self: flex-end;
+    font-weight: 600;
+  }
+
+  .message.assistant {
+    background: #003a4dcc;
+    color: #00e5ff;
+    align-self: flex-start;
+    font-style: italic;
+  }
+
+  /* Input & send button */
+  .input-area {
+    display: flex;
+    gap: 10px;
+  }
+
+  #user-input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: 2px solid #00e5ff;
+    background: #02162d;
+    color: #00e5ff;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  #user-input:focus {
+    border-color: #00ffff;
+  }
+
+  #send-btn {
+    background: #00e5ff;
+    border: none;
+    color: #000;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  #send-btn:hover {
+    background: #00b8cc;
+  }
+
+  /* Scrollbar */
+  #chat-output::-webkit-scrollbar {
+    width: 8px;
+  }
+  #chat-output::-webkit-scrollbar-thumb {
+    background: #00e5ff88;
+    border-radius: 4px;
+  }
+
+</style>
 </head>
 <body>
 
-<div id="chat-output"></div>
-<input type="text" id="user-input" placeholder="Type your message..." />
-<button id="send-btn">Send</button>
+<div class="container">
+  <div id="chat-output" aria-live="polite" aria-label="Chat messages"></div>
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Type your message here..." aria-label="User input" autocomplete="off" />
+    <button id="send-btn" aria-label="Send message">Send</button>
+  </div>
+</div>
 
 <script>
   const chatOutput = document.getElementById('chat-output');
   const userInput = document.getElementById('user-input');
   const sendBtn = document.getElementById('send-btn');
 
+  // Append chat messages
   function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message');
-    msgDiv.classList.add(sender === 'user' ? 'user' : 'assistant');
-    msgDiv.textContent = `${sender === 'user' ? 'You' : 'ForgetiX'}: ${text}`;
+    msgDiv.classList.add('message', sender);
+    msgDiv.textContent = text;
     chatOutput.appendChild(msgDiv);
     chatOutput.scrollTop = chatOutput.scrollHeight;
   }
 
-  function getResponse(text) {
-    const msg = text.toLowerCase();
-    if (msg.includes('hello')) return "Hello! How can I assist you today?";
-    if (msg.includes('your name')) return "I'm ForgetiX, your AI assistant.";
-    if (msg.includes('time')) return `Current time is ${new Date().toLocaleTimeString()}.`;
-    if (msg.includes('help')) return "Sure! Ask me anything or type your query.";
+  // Simple keyword-based response logic
+  function getResponse(input) {
+    const msg = input.toLowerCase();
+
+    // Greetings
+    if (/(hello|hi|hey|greetings|good morning|good afternoon|good evening)/.test(msg)) {
+      return "Hello! How can I assist you today?";
+    }
+    // Name
+    if (msg.includes("your name")) {
+      return "I'm NIAB, your AI assistant.";
+    }
+    // Time
+    if (msg.includes("time")) {
+      return `Current time is ${new Date().toLocaleTimeString()}.`;
+    }
+    // Creator info
+    if (msg.includes("who created you") || msg.includes("creator") || msg.includes("who made you")) {
+      return "I was created by Abinesh Kumar Vijayalakshmi.";
+    }
+    // Help
+    if (msg.includes("help")) {
+      return "Sure! You can ask me anything related to ForgetiX or just chat!";
+    }
+    // Joke
+    if (msg.includes("joke")) {
+      return "Why did the computer show up at work late? It had a hard drive!";
+    }
+    // Farewell
+    if (/(bye|goodbye|see you)/.test(msg)) {
+      return "Goodbye! Have a great day!";
+    }
+    // Default fallback
     return "I'm still learning. Could you please rephrase?";
   }
 
-  sendBtn.addEventListener('click', () => {
+  // Text-to-Speech
+  function speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.pitch = 1;
+    utterance.rate = 1;
+    window.speechSynthesis.cancel(); // cancel any ongoing speech
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Send message handler
+  function sendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
-    appendMessage('user', text);
+
+    appendMessage('user', `You: ${text}`);
     userInput.value = '';
 
     const response = getResponse(text);
-    appendMessage('assistant', response);
-  });
 
-  // Also send message on Enter key
-  userInput.addEventListener('keydown', (e) => {
+    setTimeout(() => { // slight delay to simulate thinking
+      appendMessage('assistant', `NIAB: ${response}`);
+      speak(response);
+    }, 600);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+
+  userInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
-      sendBtn.click();
+      sendMessage();
     }
   });
+
 </script>
 
 </body>
