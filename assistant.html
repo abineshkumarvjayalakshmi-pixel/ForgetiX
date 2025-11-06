@@ -190,8 +190,10 @@
 </div>
 
 
+<!-- Other HTML content -->
+
 <script>
-   const userInput = document.getElementById('user-input');
+  const userInput = document.getElementById('user-input');
   const sendBtn = document.getElementById('send-btn');
   const chatOutput = document.getElementById('chat-output');
 
@@ -248,152 +250,10 @@
       sendMessage();
     }
   });
-  // Particle animation setup
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  let particles = [];
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.radius = 1 + Math.random() * 2;
-      this.speedX = (Math.random() - 0.5) * 0.3;
-      this.speedY = (Math.random() - 0.5) * 0.3;
-      this.alpha = 0.2 + Math.random() * 0.3;
-    }
-
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-
-      if (this.x < 0 || this.x > width) this.speedX *= -1;
-      if (this.y < 0 || this.y > height) this.speedY *= -1;
-    }
-
-    draw() {
-      ctx.beginPath();
-      const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius*4);
-      gradient.addColorStop(0, `rgba(138, 121, 255, ${this.alpha})`);
-      gradient.addColorStop(1, 'rgba(138, 121, 255, 0)');
-      ctx.fillStyle = gradient;
-      ctx.arc(this.x, this.y, this.radius * 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(138, 121, 255, ${this.alpha * 0.7})`;
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  function initParticles(count=80) {
-    particles = [];
-    for(let i=0; i<count; i++) {
-      particles.push(new Particle());
-    }
-  }
-  initParticles();
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-    for(const p of particles) {
-      p.update();
-      p.draw();
-    }
-    requestAnimationFrame(animate);
-  }
-  animate();
-
-  // Chat logic
-
-  const chatOutput = document.getElementById('chat-output');
-  const userInput = document.getElementById('user-input');
-  const sendBtn = document.getElementById('send-btn');
-
-  // Append chat messages
-  function appendMessage(sender, text) {
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', sender);
-    msgDiv.textContent = text;
-    chatOutput.appendChild(msgDiv);
-    chatOutput.scrollTop = chatOutput.scrollHeight;
-  }
-
-  // Simple keyword-based response logic (for demo)
-  function getResponse(input) {
-    const msg = input.toLowerCase();
-
-    if (/(hello|hi|hey|greetings|good morning|good afternoon|good evening)/.test(msg)) {
-      return "Hello! How can I assist you today?";
-    }
-    if (msg.includes("your name")) {
-      return "I'm niab, your AI assistant.";
-    }
-    if (msg.includes("time")) {
-      return `Current time is ${new Date().toLocaleTimeString()}.`;
-    }
-    if (msg.includes("who created you") || msg.includes("creator") || msg.includes("who made you")) {
-      return "I was created by Abinesh Kumar Vijayalakshmi.";
-    }
-    if (msg.includes("help")) {
-      return "Sure! You can ask me anything related to ForgetiX or just chat!";
-    }
-    if (msg.includes("joke")) {
-      return "Why did the computer show up at work late? It had a hard drive!";
-    }
-    if (/(bye|goodbye|see you)/.test(msg)) {
-      return "Goodbye! Have a great day!";
-    }
-    return "I'm still learning. Could you please rephrase?";
-  }
-
-  // Text-to-Speech
-  function speak(text) {
-    if (!('speechSynthesis' in window)) return;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.pitch = 1;
-    utterance.rate = 1;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-  }
-
-  // Send message handler
-  function sendMessage() {
-    const text = userInput.value.trim();
-    if (!text) return;
-
-    appendMessage('user', `You: ${text}`);
-    userInput.value = '';
-
-    const response = getResponse(text);
-
-    setTimeout(() => {
-      appendMessage('assistant', `NIAB: ${response}`);
-      speak(response);
-    }, 600);
-  }
-
-  sendBtn.addEventListener('click', sendMessage);
-
-  userInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      sendMessage();
-    }
-  });
-
 </script>
+
+</body>
+
 
 </body>
 </html>
